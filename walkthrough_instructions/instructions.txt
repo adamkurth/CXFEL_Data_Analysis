@@ -1,0 +1,95 @@
+################################
+    SETUP EIGER DETECTOR
+################################
+zmq listener
+    go to source.sh: cd /home/labuser/Projects/Dectris/reborn/developer/rkirian/projects/cxls/dectris/fromzach/DEigerStream
+
+        conda activate reborn
+
+        python DEigerStream.py -i 10.139.1.5 -f junk.log
+
+initialize/arm/trigger Eiger:
+
+    source setup.sh
+    
+    initialize
+
+set parameters: 
+
+    enable_monitor
+    enable_stream
+    enable_filewriter
+
+    nimages x
+    frame_time x (seconds)
+    count_time x (seconds)
+    nimages_per_file x
+
+take pictures:
+    arm/disarm 
+    trigger
+
+Problems fetching images from http://10.139.1.5/data/ ??:
+    reboot DCU: http://10.139.1.5/#/admin/system
+    
+download and overwrite images: 
+    source setup.sh
+    
+    download_images_from_IP
+
+################################
+VIEW HDF5 IMAGES THROUGH REBORN
+################################
+go to workind directory:
+    cd /home/labuser/Projects/Dectris/test/temp_data 
+Export python path
+    export PYTHONPATH=$PYTHONPATH:/home/labuser/Projects/Dectris/reborn
+Run test_h5_reading.py
+    python test_h5_reading
+ 
+
+    Troubleshoot: error occurs module '' not found
+        conda list
+    if not installed in conda list: 
+        conda install <module>
+
+################################
+            AGAVE
+################################
+upon startup in AGAVE:
+    link to AGAVE: https://asurc.atlassian.net/wiki/spaces/RC/overview?homepageId=45711712  
+set interactive before doing intensive activities. type ... to switch nodes from login: 
+    interactive
+AGAVE activate conda enviornments:
+    anaconda3: source /home/amkurth/anaconda3/bin/activate
+    miniconda: source /home/amkurth/anaconda3/bin/activate
+
+loading modules: 
+    check available modules: module -l avail 
+    to load a module: module load <module name/version number>
+    to check which modules that are loaded: module list
+    unload all loaded modules: module purge 
+
+Notes on using ./index-turbo-slurm 
+finding partitions: sinfo
+    selecting output of only partition names: sinfo -h --format="%P" 
+    detailed information of specific 'partition_name': sinfo -p <partition_name>
+watch tasks: watch 'squeue -u <username>' 
+             watch 'squeue -u amkurth'
+
+
+many conda instructions must be of the form 
+    conda <x> <y> --override-channels -c defaults 
+
+Run pattern_sim: 
+Format:
+    pattern_sim -g <geometry file> -p <pdb file> --number=<number of simulations> -o <output filename> -i <intensities file> -r <random orientation per sim> 
+    --min-size=<random crystal size min> --max-size=<random crystal size max> --spectrum=<type of spectrum> -s <include n samples from spectrum in calculations> 
+    --background=0 --beam-bandwidth=<> --photon-energy=8000 --nphotons=3e9 --beam-radius=<usually covered in spectrum option> --no-noise #no Poisson dist
+Entered: 
+    pattern_sim -g Eiger4M.geom -p 1vds.pdb --number=1000 -o sim_test -i 1vds.pdb.hkl -r --min-size=15e-6 --max-size=20e-6 --spectrum=tophat -s 7 
+    --background=0 --beam-bandwidth=0.01 --photon-energy=8000 --nphotons=3e9 --beam-radius=20e-6 --no-noise
+
+
+./index-turbo-slurm #Name #Run.sh name #geometry #working directory #tasks(cores) #partition #qos ?? #Hours 1 #tag optonal
+./index-turbo-slurm #pattern_1vds #pattern_1vds #Eiger4M.geom #~/Development/pattern_simulations #20 #htcgpul #qos ?? #1 #tag optonal

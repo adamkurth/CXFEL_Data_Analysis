@@ -1,0 +1,89 @@
+with peakfinder:
+
+
+
+understand the code of peakfinder.py
+
+baby steps- write a script that circles the peaks with a count of 1, (cosmic radiation)
+
+implement what you've learned into peakfinder-adam.py and make sure it works
+
+
+################################################
+touch base next tuesday 8/15 write down questions!
+
+learn crystfel through command line
+
+simulate dataset, same random seed with 2 different intensities
+https://www.desy.de/~twhite/crystfel/manual-pattern_sim.html (pattern sim only needs unit cell file)
+
+simulate 1 with very strong intensities, for protein lysozyme pdb entry 1vds
+https://www.rcsb.org/structure/1VDS under tab: experimental data & validation: 
+
+get crystfel running on agave
+https://asurc.atlassian.net/wiki/spaces/RC/overview?homepageId=45711712
+run agave
+
+research computing SLURM and crystfel SLURM 
+rull all through SLURM with agave
+
+run and simulate dataset, mess around with parameters to get quality defraction images.
+
+    put in SOP(getting setup, collecting, filewriter, downloads), setup.sh files, etc into repository
+
+10E-8 bandwidth, get through email
+
+then 
+ 
+duplicate crystfel.stream, write new file with everything, moreover the intensities.
+
+get .geom file specifically for Eiger4M
+
+maniplulate the crystfel.stream to replace intensity values with every imagesn.
+
+take coordinate value from stream, calculate the intensity from image using 3 ring method and check whether its the same as written in the crystfel.stream file.
+make sure these are going where they should.
+
+start with crystfel running on agave
+figure out pattern sim, with good dataset for lysozyme and Eiger4M 
+
+#########################################
+instructions: create pattern_sim on AGAVE:
+
+Space Group: https://www.rcsb.org/structure/1VDS wikipedia list groups #96 for lysozyme
+crystal system: tetragonal crystal system
+
+unique axis: P centered tetragonal, C is unique axis
+             P centered monoclinic space group: is not C its Beta.
+
+Point group: disregard the gen-sfd-anon
+             4-2, m-n merge 2 mirror planes, which merges the two and doubling redunancy
+
+running pattern_sim: quaternion does not matter use -r
+    --min and --max options input crystal size
+    dont go bigger than 20 um keep constant, min size 15-20 um 
+    for --spectrum tophat is correct
+    beam radius = crystal size 20um
+
+DatView: very buggy software to visualize
+    make enviornment for DatView using conda, and conda cheat sheet
+    conda create DatView
+    conda activate DatView
+    install necessary packages 
+
+    give stream file -> numpy array
+    read more in readme file
+    run datview with numpy array, and use gui to plot parameters against eachother
+    can select and becomes buggy and may crash
+ 
+
+
+install anaconda
+ close term reopen, do it anyway
+ open terminal base enviornment, use conda to install anything pip, python update, cmake
+
+once installed anaconda 
+~/anaconda3/bin/cmake
+which cmake this is the path it should show use anaconda cmake not the other.
+
+
